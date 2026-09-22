@@ -1,0 +1,74 @@
+[
+  {
+    "id": "proj-1",
+    "title": "ProjectHub Showcase Manager",
+    "description": "Full-stack portfolio project manager featuring REST API, dynamic filtering, real-time metrics, and cloud database persistence.",
+    "category": "Full Stack",
+    "techStack": [
+      "React",
+      "Node.js",
+      "Express",
+      "MongoDB",
+      "CSS3"
+    ],
+    "repoUrl": "https://github.com/example/projecthub",
+    "liveUrl": "https://projecthub-demo.vercel.app",
+    "status": "Completed",
+    "featured": true,
+    "createdAt": "2026-03-01T10:00:00.000Z"
+  },
+  {
+    "id": "proj-2",
+    "title": "AI Code Review Assistant",
+    "description": "An automated code analysis bot using LLMs to scan pull requests for security flaws, code smells, and performance bottlenecks.",
+    "category": "AI/ML",
+    "techStack": [
+      "Python",
+      "FastAPI",
+      "React",
+      "OpenAI",
+      "Docker"
+    ],
+    "repoUrl": "https://github.com/example/ai-code-reviewer",
+    "liveUrl": "https://ai-reviewer.onrender.com",
+    "status": "In Progress",
+    "featured": true,
+    "createdAt": "2026-03-10T14:30:00.000Z"
+  },
+  {
+    "id": "proj-3",
+    "title": "Cloud Task & Sprint Tracker",
+    "description": "Agile project management dashboard with Kanban boards, sprint analytics, WebSocket real-time collaboration, and JWT auth.",
+    "category": "Cloud",
+    "techStack": [
+      "React",
+      "TypeScript",
+      "Node.js",
+      "PostgreSQL",
+      "Socket.io"
+    ],
+    "repoUrl": "https://github.com/example/cloud-task-tracker",
+    "liveUrl": "",
+    "status": "Completed",
+    "featured": false,
+    "createdAt": "2026-03-15T09:15:00.000Z"
+  },
+  {
+    "id": "proj-4",
+    "title": "EcoPulse Smart Energy Monitor",
+    "description": "IoT sensor telemetry dashboard visualizing real-time solar panel output, home battery state, and consumption forecasts.",
+    "category": "IoT",
+    "techStack": [
+      "React",
+      "Chart.js",
+      "Express",
+      "MQTT",
+      "TimescaleDB"
+    ],
+    "repoUrl": "https://github.com/example/ecopulse-energy",
+    "liveUrl": "https://ecopulse-monitor.vercel.app",
+    "status": "Planned",
+    "featured": false,
+    "createdAt": "2026-03-18T16:45:00.000Z"
+  }
+]

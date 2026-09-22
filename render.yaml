@@ -1,0 +1,27 @@
+services:
+  # Backend Web Service
+  - type: web
+    name: projecthub-server
+    env: node
+    plan: free
+    buildCommand: npm --prefix server install
+    startCommand: npm --prefix server start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        sync: false
+
+  # Frontend Static Site
+  - type: web
+    name: projecthub-client
+    env: static
+    plan: free
+    buildCommand: npm --prefix client install && npm --prefix client run build
+    staticPublishPath: client/dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
