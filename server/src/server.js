@@ -1,10 +1,15 @@
 import express from 'express';
+import http from 'http';
+import { Server } from 'socket.io';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { connectDB } from './config/db.js';
 import projectRoutes from './routes/projectRoutes.js';
+import authRoutes from './routes/authRoutes.js';
+import taskRoutes from './routes/taskRoutes.js';
+import { initSocket } from './socket/socketHandler.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -13,12 +18,24 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.join(__dirname, '..', '.env') });
 
 const app = express();
+const httpServer = http.createServer(app);
+
+// Setup Socket.io for Real-time bi-directional events
+const io = new Server(httpServer, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
+  }
+});
+
+initSocket(io);
+
 const PORT = process.env.PORT || 5000;
 
-// Enable CORS for frontend development and production
+// Enable CORS
 app.use(cors({
   origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
@@ -34,27 +51,52 @@ app.use((req, res, next) => {
 });
 
 // API Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/tasks', taskRoutes);
 app.use('/api/projects', projectRoutes);
 
-// Health check root
+// Health check and API documentation root
 app.get('/api', (req, res) => {
   res.json({
-    name: 'ProjectHub API',
-    version: '1.0.0',
-    description: 'REST API for Managing and Showcasing Full-Stack Projects',
+    name: 'ProjectHub & TaskFlow API',
+    version: '2.0.0',
+    description: 'Full-stack REST API with JWT Auth, Task CRUD, and WebSockets',
+    features: [
+      'User Authentication & RBAC (JWT + Bcrypt)',
+      'Task CRUD & Sprint Metrics',
+      'Real-time WebSocket Synchronization (Socket.io)',
+      'Dual Storage (MongoDB Atlas + Zero-config Local Store)'
+    ],
     endpoints: {
-      health: 'GET /api/projects/health',
-      stats: 'GET /api/projects/stats',
-      listProjects: 'GET /api/projects',
-      getProject: 'GET /api/projects/:id',
-      createProject: 'POST /api/projects',
-      updateProject: 'PUT /api/projects/:id',
-      deleteProject: 'DELETE /api/projects/:id'
+      auth: {
+        register: 'POST /api/auth/register',
+        login: 'POST /api/auth/login',
+        me: 'GET /api/auth/me',
+        users: 'GET /api/auth/users'
+      },
+      tasks: {
+        list: 'GET /api/tasks',
+        stats: 'GET /api/tasks/stats',
+        get: 'GET /api/tasks/:id',
+        create: 'POST /api/tasks',
+        update: 'PUT /api/tasks/:id',
+        updateStatus: 'PATCH /api/tasks/:id/status',
+        delete: 'DELETE /api/tasks/:id'
+      },
+      projects: {
+        health: 'GET /api/projects/health',
+        stats: 'GET /api/projects/stats',
+        list: 'GET /api/projects',
+        get: 'GET /api/projects/:id',
+        create: 'POST /api/projects',
+        update: 'PUT /api/projects/:id',
+        delete: 'DELETE /api/projects/:id'
+      }
     }
   });
 });
 
-// Serve frontend build if present (for single-service deployment)
+// Serve frontend build if present
 const clientDistPath = path.join(__dirname, '..', '..', 'client', 'dist');
 app.use(express.static(clientDistPath));
 
@@ -83,12 +125,13 @@ app.use((err, req, res, next) => {
 // Connect to Database and start server
 async function startServer() {
   await connectDB();
-  app.listen(PORT, () => {
-    console.log(`🚀 ProjectHub Server running on http://localhost:${PORT}`);
+  httpServer.listen(PORT, () => {
+    console.log(`🚀 ProjectHub & TaskFlow Server running on http://localhost:${PORT}`);
     console.log(`📡 API Documentation available at http://localhost:${PORT}/api`);
+    console.log(`⚡ WebSocket Server active on ws://localhost:${PORT}`);
   });
 }
 
 startServer();
 
-export default app;
+export { app, httpServer, io };

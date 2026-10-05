@@ -1,38 +1,76 @@
-# 🚀 ProjectHub — Full-Stack Project Showcase & Manager
+# 🚀 TaskFlow & ProjectHub — Full-Stack Application
 
-A modern, production-ready full-stack web application designed for developer portfolio and project management. Built to demonstrate clean architecture and seamless integration between **Frontend**, **Backend**, and **Database**, ready for instant local testing and cloud deployment.
+A modern, production-grade full-stack web application designed for developer task management, real-time team collaboration, and portfolio project showcase. Built to demonstrate clean architecture, robust API integration, stateless JWT authentication, and dynamic data handling with WebSockets.
 
-![ProjectHub Architecture](https://img.shields.io/badge/Architecture-MERN%20%2F%20Full%20Stack-indigo?style=for-the-badge)
-![Frontend](https://img.shields.io/badge/Frontend-React%20%2B%20Vite-blue?style=for-the-badge)
+![Architecture](https://img.shields.io/badge/Architecture-Full%20Stack%20%7C%20REST%20%2B%20WebSockets-indigo?style=for-the-badge)
+![Frontend](https://img.shields.io/badge/Frontend-React%2018%20%2B%20Vite-blue?style=for-the-badge)
 ![Backend](https://img.shields.io/badge/Backend-Node.js%20%2F%20Express-green?style=for-the-badge)
-![Database](https://img.shields.io/badge/Database-MongoDB%20%2F%20Cloud%20Ready-emerald?style=for-the-badge)
-![Deploy](https://img.shields.io/badge/Deploy-Vercel%20%7C%20Render%20%7C%20Netlify-black?style=for-the-badge)
+![Real-Time](https://img.shields.io/badge/Real--Time-Socket.io%20WebSockets-orange?style=for-the-badge)
+![Security](https://img.shields.io/badge/Security-JWT%20%2B%20Bcrypt-red?style=for-the-badge)
+![Database](https://img.shields.io/badge/Database-MongoDB%20%2B%20Zero--Config%20Store-emerald?style=for-the-badge)
 
 ---
 
-## 🎯 Project Overview & Features
+## 🎯 Core Features & Requirements
 
-- **Frontend (Client)**:
-  - Built with **React 18** and **Vite** for lightning-fast HMR and bundle optimization.
-  - Interactive Project Showcase with category filtering (`Full Stack`, `Frontend`, `Backend`, `AI/ML`, `Cloud`, `IoT`).
-  - Real-time search across titles, descriptions, and technology tags.
-  - Live **Statistics Dashboard** showing total projects, completion breakdown, and top technologies.
-  - Responsive Modal for **CRUD Operations** (Create, Read, Update, Delete) with live validation.
-  - Real-time API and Database connectivity health badge.
+### 1. 🔐 User Authentication & Authorization
+- **Cryptographic Security**: Passwords are securely salted and hashed using `bcryptjs` (10 rounds) before persistence. Plaintext passwords never enter storage.
+- **Stateless Session Tokens**: JSON Web Tokens (JWT) signed with expiration (7 days).
+- **Protected Endpoints & Middleware**:
+  - `protect`: Extracts and validates `Bearer <token>` from the HTTP `Authorization` header, looks up user profile, and attaches `req.user`.
+  - `authorize(...roles)`: Role-Based Access Control (RBAC) ensuring only designated roles (e.g. `admin` vs `member`) can perform privileged actions.
+- **Instant 1-Click Demo Logins**: Includes pre-seeded accounts in the UI so anyone evaluating the project can log in with a single click without typing:
+  - 👑 **Demo Admin**: `alex@demo.com` / `password123`
+  - 👩‍💻 **Demo Member**: `sarah@demo.com` / `password123`
 
-- **Backend (Server)**:
-  - **Node.js** with **Express.js** RESTful API.
-  - Modular architecture: Models, Controllers, Routes, and Database configuration.
-  - Comprehensive input validation and error handling.
-  - Aggregated metrics calculations (`/api/projects/stats`).
+### 2. 📋 Full CRUD Operations for Tasks
+- **Task Schema**:
+  - `title`: Task summary (required).
+  - `description`: Detailed context and acceptance criteria.
+  - `status`: State machine transition across `To Do` ➔ `In Progress` ➔ `In Review` ➔ `Done`.
+  - `priority`: `Low`, `Medium`, `High`, `Urgent` (with visual badges and glow indicators).
+  - `dueDate`: Due date with automatic overdue warning styling.
+  - `tags`: Tag/label chips.
+  - `assignedTo`: Team member attribution (initials avatar, name, email).
+  - `createdBy`: Creator audit reference.
+- **RESTful Endpoints**:
+  - `GET /api/tasks`: Multi-parameter query filtering (`search`, `status`, `priority`, `assignedTo`, `sortBy`, `order`).
+  - `GET /api/tasks/:id`: Retrieve single task details.
+  - `POST /api/tasks`: Create new task (protected, automatically assigns creator).
+  - `PUT /api/tasks/:id`: Full update of task attributes (protected).
+  - `PATCH /api/tasks/:id/status`: Fast status transition for 1-click status moves.
+  - `DELETE /api/tasks/:id`: Delete task (protected).
+  - `GET /api/tasks/stats`: Aggregated sprint metrics (total, by status, by priority, overdue count, completion rate %).
 
-- **Database**:
-  - **MongoDB Atlas** cloud connectivity via **Mongoose**.
-  - **Zero-Config Local Fallback**: Includes a built-in persistent storage engine so you can run, test, and present the application immediately out of the box without needing local MongoDB installed!
-  - When `MONGODB_URI` is provided, it automatically switches to live MongoDB seamlessly.
+### 3. ⚡ Real-Time Updates via WebSockets (Socket.io)
+- **Bi-Directional Event Streaming**:
+  - Integrated HTTP server + `socket.io` instance.
+  - `task:created`: Broadcasts newly created task to all connected clients.
+  - `task:updated`: Broadcasts edits or status advances across all open browser tabs/windows.
+  - `task:deleted`: Broadcasts deleted task ID to prune local state instantly.
+  - `users:count`: Broadcasts live active connection count.
+- **Client Synchronization**:
+  - Custom `useSocket` hook handles connection lifecycle, reconnects, and event merging.
+  - Real-time connection badge in the header: `🟢 Real-Time (X online)`.
+  - Live toast banner on multi-user actions (e.g. *"Sarah moved 'WebSocket Gateway' to Done"*).
 
-- **Hosting & Deployment Ready**:
-  - Pre-configured deployment manifests: [`vercel.json`](./vercel.json) for Vercel and [`render.yaml`](./render.yaml) for Render.
+### 4. 📱 Responsive Design for Web and Mobile
+- **Dual Work Views**:
+  - **Kanban Board View**: 4 columns (`To Do`, `In Progress`, `In Review`, `Done`) with quick status-advance buttons and mobile column tabs.
+  - **Task List View**: Dense, sortable table layout with inline status change dropdowns.
+  - **Project Showcase View**: Preserves the original portfolio project showcase.
+- **Mobile Optimizations**:
+  - Mobile column navigation tabs (switch between Kanban columns effortlessly with your thumb).
+  - Slide-out mobile navigation drawer with hamburger trigger.
+  - Floating Action Button (FAB) on mobile screens for rapid task creation.
+  - Touch-friendly tap targets (minimum 44x44px) and smooth glassmorphic styling.
+
+### 5. 📖 Interactive Architecture & Learning Guide
+- Click the **"Architecture Guide"** button in the header or footer to view an interactive modal detailing:
+  - Full-stack client-server monorepo layout.
+  - JWT auth lifecycle and header injection.
+  - WebSocket event loop mechanics.
+  - REST API patterns and error handling.
 
 ---
 
@@ -40,160 +78,114 @@ A modern, production-ready full-stack web application designed for developer por
 
 ```
 intern/
-├── client/                     # Frontend Application (React + Vite)
+├── client/                     # Frontend Application (React 18 + Vite)
 │   ├── public/
 │   ├── src/
 │   │   ├── components/         # Reusable UI components
-│   │   │   ├── Navbar.jsx
-│   │   │   ├── StatsBanner.jsx
-│   │   │   ├── FilterBar.jsx
-│   │   │   ├── ProjectCard.jsx
-│   │   │   └── ProjectModal.jsx
+│   │   │   ├── AuthModal.jsx        # Login / Register / 1-Click Demo
+│   │   │   ├── KanbanBoard.jsx      # 4-Column responsive board + mobile tabs
+│   │   │   ├── TaskListView.jsx     # Dense responsive table view
+│   │   │   ├── TaskModal.jsx        # Create/Edit task modal
+│   │   │   ├── TaskFilterBar.jsx    # Search, status/priority filters, view toggles
+│   │   │   ├── TaskStatsBanner.jsx  # Sprint metrics & progress bar
+│   │   │   ├── LearningModal.jsx    # Interactive architectural guide
+│   │   │   ├── Navbar.jsx           # Responsive header + mobile drawer
+│   │   │   ├── ProjectCard.jsx      # Project showcase card
+│   │   │   ├── ProjectModal.jsx     # Project showcase modal
+│   │   │   └── StatsBanner.jsx      # Project showcase stats
+│   │   ├── context/
+│   │   │   ├── AuthContext.jsx      # JWT Auth state & token storage
+│   │   │   └── SocketContext.jsx    # Socket.io connection & events
 │   │   ├── services/
-│   │   │   └── api.js          # Centralized API service
-│   │   ├── App.jsx             # Main Application Logic
-│   │   ├── main.jsx            # React DOM Entry
-│   │   └── index.css           # Modern Design System styling
-│   ├── index.html
+│   │   │   └── api.js               # Centralized fetch client with Auth headers
+│   │   ├── App.jsx                  # Main Application logic & view router
+│   │   ├── main.jsx                 # Entrypoint with context providers
+│   │   └── index.css                # Responsive glassmorphism design system
 │   ├── package.json
-│   └── vite.config.js          # Vite config with API proxy
-├── server/                     # Backend REST API (Express)
+│   └── vite.config.js               # Vite config with API & WebSocket proxy
+├── server/                     # Backend REST API & WebSocket Server
 │   ├── src/
 │   │   ├── config/
-│   │   │   └── db.js           # Database connection & adapter
+│   │   │   └── db.js                # Dual database adapter (Mongo + Local JSON)
 │   │   ├── controllers/
-│   │   │   └── projectController.js # CRUD & Stats logic
+│   │   │   ├── authController.js    # Register, Login, Me, Team Users
+│   │   │   ├── taskController.js    # Task CRUD, status, stats + Socket emits
+│   │   │   └── projectController.js # Project showcase CRUD
+│   │   ├── middleware/
+│   │   │   └── authMiddleware.js    # JWT verification & RBAC authorization
 │   │   ├── models/
-│   │   │   └── Project.js      # Unified Mongoose & Persistent Model
+│   │   │   ├── User.js              # Mongoose User + Local persistent user store
+│   │   │   ├── Task.js              # Mongoose Task + Local persistent task store
+│   │   │   └── Project.js           # Mongoose Project + Local persistent store
 │   │   ├── routes/
-│   │   │   └── projectRoutes.js     # API Route declarations
+│   │   │   ├── authRoutes.js        # /api/auth routes
+│   │   │   ├── taskRoutes.js        # /api/tasks routes
+│   │   │   └── projectRoutes.js     # /api/projects routes
+│   │   ├── socket/
+│   │   │   └── socketHandler.js     # Socket.io connections & event broadcasters
 │   │   ├── data/
-│   │   │   └── seedData.js     # Starter sample projects
-│   │   └── server.js           # Express App initialization
-│   ├── .env.example            # Environment variables template
+│   │   │   ├── seedTasks.js         # Starter tasks across all stages
+│   │   │   └── seedData.js          # Starter projects
+│   │   └── server.js                # Express + HTTP + Socket.io Server
+│   ├── test_api.mjs                 # Automated full-stack integration test suite
 │   └── package.json
-├── vercel.json                 # Vercel unified deployment config
-├── render.yaml                 # Render infrastructure config
-├── package.json                # Monorepo scripts
+├── package.json                # Monorepo root scripts
 └── README.md
 ```
 
 ---
 
-## ⚡ Quick Start (Local Development)
+## ⚡ Quick Start
 
 ### 1. Install Dependencies
-Run the command below from the project root:
-
+From the project root:
 ```powershell
-# Install backend and frontend dependencies
 npm run install:all
 ```
 
-Alternatively, install each individually:
+### 2. Run Automated Integration Tests
+Verify that all authentication, task CRUD, and frontend-serving endpoints pass:
 ```powershell
-cd server
-npm install
-cd ../client
-npm install
+npm --prefix server test
 ```
 
-### 2. Configure Environment Variables
-Inside `server/`, create or inspect `.env`:
-```env
-PORT=5000
-NODE_ENV=development
-# Optional: Paste your MongoDB Atlas URI here.
-# If left blank, it automatically uses the local persistent database!
-MONGODB_URI=
-```
+### 3. Start Development Servers
+Run the backend and frontend concurrently:
 
-### 3. Start the Backend API
-In a terminal:
+**Terminal 1 (Backend):**
 ```powershell
 npm run dev:server
+# Server starts on http://localhost:5000 with WebSockets on ws://localhost:5000
 ```
-*API will start on `http://localhost:5000`.*
 
-### 4. Start the Frontend
-In a second terminal:
+**Terminal 2 (Frontend):**
 ```powershell
 npm run dev:client
+# Vite dev server opens on http://localhost:3000 (proxies /api and /socket.io to backend)
 ```
-*Frontend will launch on `http://localhost:3000`.*
 
-Open [http://localhost:3000](http://localhost:3000) in your browser!
-
----
-
-## 📡 REST API Reference
-
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| `GET` | `/api/projects/health` | Check backend & database connection status |
-| `GET` | `/api/projects/stats` | Compute aggregated project & technology statistics |
-| `GET` | `/api/projects` | List projects (supports `?search=`, `?category=`, `?status=`) |
-| `GET` | `/api/projects/:id` | Retrieve single project details |
-| `POST` | `/api/projects` | Create a new project (JSON body) |
-| `PUT` | `/api/projects/:id` | Update project fields (JSON body) |
-| `DELETE` | `/api/projects/:id` | Delete a project by ID |
-
-### Sample JSON Payload for `POST /api/projects`:
-```json
-{
-  "title": "Smart AI Code Reviewer",
-  "description": "An automated bot analyzing pull requests for security and performance.",
-  "category": "AI/ML",
-  "techStack": ["React", "FastAPI", "OpenAI", "Docker"],
-  "repoUrl": "https://github.com/example/ai-reviewer",
-  "liveUrl": "https://ai-reviewer.onrender.com",
-  "status": "In Progress"
-}
+Alternatively, build the client and run single-service production mode:
+```powershell
+npm run build
+npm start
+# Visit http://localhost:5000 directly!
 ```
 
 ---
 
-## ☁️ Setting Up Cloud Database (Free MongoDB Atlas)
-
-1. Go to [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register) and create a free account.
-2. Create a free **M0 Shared Cluster**.
-3. Under **Database Access**, create a database user (username and password).
-4. Under **Network Access**, click **Add IP Address** -> select **Allow Access from Anywhere (`0.0.0.0/0`)**.
-5. Click **Connect** -> **Drivers (Node.js)** and copy your connection string:
-   ```
-   mongodb+srv://<username>:<password>@cluster0.abcde.mongodb.net/projecthub?retryWrites=true&w=majority
-   ```
-6. Add it to `server/.env` as `MONGODB_URI=...` or in your hosting provider's Environment Variables.
+## 🧪 Testing Real-Time WebSockets
+1. Open the application in two separate browser tabs or windows side-by-side (`http://localhost:3000`).
+2. Notice the real-time indicator pill shows `🟢 Real-Time (2 online)`.
+3. In Tab A, click **"+ New Task"** or click the move arrow `➔` on a task card.
+4. Observe Tab B update **instantaneously without any page refresh**, accompanied by a real-time notification alert!
 
 ---
 
-## 🚀 Live Cloud Deployment
+## 🔑 Pre-Configured Demo Accounts
+| Role | Email | Password |
+|---|---|---|
+| **Admin** | `alex@demo.com` | `password123` |
+| **Member** | `sarah@demo.com` | `password123` |
+| **Member** | `david@demo.com` | `password123` |
 
-### Option A: Deploy on Vercel (Recommended)
-1. Push your repository to **GitHub**:
-   ```bash
-   git init
-   git add .
-   git commit -m "Initial commit of ProjectHub"
-   git branch -M main
-   git remote add origin https://github.com/<your-username>/<repo-name>.git
-   git push -u origin main
-   ```
-2. Log in to [Vercel](https://vercel.com/) and click **Add New Project**.
-3. Import your GitHub repository.
-4. In **Environment Variables**, add:
-   - `MONGODB_URI`: *Your MongoDB Atlas connection string*
-5. Click **Deploy**. Vercel will build both the React frontend and Express serverless backend using [`vercel.json`](./vercel.json)!
-
-### Option B: Deploy on Render
-1. Push your repository to GitHub.
-2. Log in to [Render](https://render.com/) and click **New > Blueprint**.
-3. Connect your repository. Render will automatically read [`render.yaml`](./render.yaml) and configure both the Web Service (backend) and Static Site (frontend).
-4. Supply your `MONGODB_URI` in the dashboard settings.
-
-### Option C: Deploy Frontend to Netlify
-1. Build the client locally: `npm run build`.
-2. Connect your repo on [Netlify](https://www.netlify.com/).
-3. Set Build command: `npm --prefix client install && npm --prefix client run build`.
-4. Set Publish directory: `client/dist`.
-5. Under Environment variables, add `VITE_API_URL` pointing to your deployed backend URL.
+*(You can also register any new account directly in the Sign In / Register dialog!)*

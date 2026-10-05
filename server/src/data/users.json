@@ -1,0 +1,32 @@
+[
+  {
+    "id": "user-admin-1",
+    "name": "Alex Morgan",
+    "email": "alex@demo.com",
+    "password": "$2b$10$dGm/N1JQl4khZn6WYxYE7erOyVKZzAA36iH2NnFeNSEPOHmauiUie",
+    "role": "admin",
+    "avatar": "AM",
+    "createdAt": "2026-01-10T09:00:00.000Z",
+    "updatedAt": "2026-01-10T09:00:00.000Z"
+  },
+  {
+    "id": "user-member-2",
+    "name": "Sarah Chen",
+    "email": "sarah@demo.com",
+    "password": "$2b$10$dGm/N1JQl4khZn6WYxYE7erOyVKZzAA36iH2NnFeNSEPOHmauiUie",
+    "role": "member",
+    "avatar": "SC",
+    "createdAt": "2026-01-15T11:30:00.000Z",
+    "updatedAt": "2026-01-15T11:30:00.000Z"
+  },
+  {
+    "id": "user-member-3",
+    "name": "David Kim",
+    "email": "david@demo.com",
+    "password": "$2b$10$dGm/N1JQl4khZn6WYxYE7erOyVKZzAA36iH2NnFeNSEPOHmauiUie",
+    "role": "member",
+    "avatar": "DK",
+    "createdAt": "2026-02-01T14:00:00.000Z",
+    "updatedAt": "2026-02-01T14:00:00.000Z"
+  }
+]

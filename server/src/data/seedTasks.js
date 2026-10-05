@@ -1,0 +1,128 @@
+export const initialTasks = [
+  {
+    id: "task-1",
+    title: "Implement JWT Authentication & Refresh Flow",
+    description: "Build secure token verification middleware, access token generation, and secure HTTP-only cookies fallback.",
+    status: "Done",
+    priority: "High",
+    dueDate: "2026-03-25",
+    tags: ["Security", "Backend", "Auth"],
+    assignedTo: {
+      id: "user-admin-1",
+      name: "Alex Morgan",
+      email: "alex@demo.com",
+      avatar: "AM"
+    },
+    createdBy: {
+      id: "user-admin-1",
+      name: "Alex Morgan"
+    },
+    createdAt: new Date("2026-03-10T10:00:00.000Z").toISOString(),
+    updatedAt: new Date("2026-03-12T16:00:00.000Z").toISOString()
+  },
+  {
+    id: "task-2",
+    title: "Build Responsive Kanban Board UI",
+    description: "Create 4-column drag/click task state machine with glassmorphic styling, swipeable mobile tabs, and responsive layout.",
+    status: "In Progress",
+    priority: "Urgent",
+    dueDate: "2026-04-05",
+    tags: ["Frontend", "UI/UX", "React"],
+    assignedTo: {
+      id: "user-member-2",
+      name: "Sarah Chen",
+      email: "sarah@demo.com",
+      avatar: "SC"
+    },
+    createdBy: {
+      id: "user-admin-1",
+      name: "Alex Morgan"
+    },
+    createdAt: new Date("2026-03-14T09:30:00.000Z").toISOString(),
+    updatedAt: new Date("2026-03-15T11:45:00.000Z").toISOString()
+  },
+  {
+    id: "task-3",
+    title: "Setup WebSocket Real-Time Gateway",
+    description: "Integrate Socket.io with Express server to broadcast task mutations (create, update, delete) to connected browser clients.",
+    status: "In Review",
+    priority: "High",
+    dueDate: "2026-04-02",
+    tags: ["WebSockets", "Realtime", "Node.js"],
+    assignedTo: {
+      id: "user-member-3",
+      name: "David Kim",
+      email: "david@demo.com",
+      avatar: "DK"
+    },
+    createdBy: {
+      id: "user-member-2",
+      name: "Sarah Chen"
+    },
+    createdAt: new Date("2026-03-16T14:15:00.000Z").toISOString(),
+    updatedAt: new Date("2026-03-18T10:20:00.000Z").toISOString()
+  },
+  {
+    id: "task-4",
+    title: "Design Mobile Navigation Drawer",
+    description: "Implement mobile hamburger toggle, bottom quick action bar, and smooth slide-out panel for view switching on smartphones.",
+    status: "To Do",
+    priority: "Medium",
+    dueDate: "2026-04-10",
+    tags: ["Mobile", "CSS", "Responsive"],
+    assignedTo: {
+      id: "user-member-2",
+      name: "Sarah Chen",
+      email: "sarah@demo.com",
+      avatar: "SC"
+    },
+    createdBy: {
+      id: "user-admin-1",
+      name: "Alex Morgan"
+    },
+    createdAt: new Date("2026-03-18T15:00:00.000Z").toISOString(),
+    updatedAt: new Date("2026-03-18T15:00:00.000Z").toISOString()
+  },
+  {
+    id: "task-5",
+    title: "Task Aggregation & Sprint Metrics API",
+    description: "Calculate real-time completion percentages, overdue task counts, and priority distribution for executive dashboard stats.",
+    status: "Done",
+    priority: "Medium",
+    dueDate: "2026-03-28",
+    tags: ["Backend", "Analytics", "API"],
+    assignedTo: {
+      id: "user-member-3",
+      name: "David Kim",
+      email: "david@demo.com",
+      avatar: "DK"
+    },
+    createdBy: {
+      id: "user-admin-1",
+      name: "Alex Morgan"
+    },
+    createdAt: new Date("2026-03-11T08:00:00.000Z").toISOString(),
+    updatedAt: new Date("2026-03-14T17:00:00.000Z").toISOString()
+  },
+  {
+    id: "task-6",
+    title: "Optimize API Response Caching & Rate Limiting",
+    description: "Benchmark endpoint latency and apply lightweight memoization headers to improve high-throughput query performance.",
+    status: "To Do",
+    priority: "Low",
+    dueDate: "2026-04-18",
+    tags: ["Performance", "DevOps"],
+    assignedTo: {
+      id: "user-admin-1",
+      name: "Alex Morgan",
+      email: "alex@demo.com",
+      avatar: "AM"
+    },
+    createdBy: {
+      id: "user-member-3",
+      name: "David Kim"
+    },
+    createdAt: new Date("2026-03-19T11:20:00.000Z").toISOString(),
+    updatedAt: new Date("2026-03-19T11:20:00.000Z").toISOString()
+  }
+];
